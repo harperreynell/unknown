@@ -5,6 +5,7 @@ import About from "./pages/About";
 import Login from "./pages/Login";
 import History from "./pages/History";
 import Profile from "./pages/Profile";
+import SignUp from "./pages/Signup";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -16,7 +17,7 @@ const App = () => {
   return (
     <>
       <nav>
-        <Link to="/">Home</Link> | <Link to="/about">About</Link> 
+        <Link to="/">Home</Link> | <Link to="/about">About</Link> | <Link to="/signup">Sign Up</Link>
         {isLoggedIn ? (
           <>
             | <Link to="/profile">Profile</Link> | <Link to="/history">History</Link> |{" "}
@@ -35,6 +36,9 @@ const App = () => {
           <Route
             path="/login"
             element={<Login onLogin={() => handleLogin(true)} />}
+          />
+          <Route
+            path="/signup" element={<SignUp />}
           />
           <Route
             path="/profile" element={<Profile />}

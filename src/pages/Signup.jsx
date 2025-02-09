@@ -1,9 +1,9 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { auth, signInWithEmailAndPassword } from "../../backend/server"; 
+import { auth, createUserWithEmailAndPassword } from "../../backend/server"; 
 
-const Login = ({ onLogin }) => { 
+const SignUp = ({ onLogin }) => { 
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
 
@@ -11,24 +11,24 @@ const Login = ({ onLogin }) => {
     const { email, password } = data;
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      console.log("User logged in:", userCredential.user);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      console.log("User signed up:", userCredential.user);
       onLogin(true); 
-      navigate("/");
+      navigate("/"); 
     } catch (error) {
-      console.error("Error logging in:", error.message);
+      console.error("Error signing up:", error.message);
       alert(error.message);
     }
   };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: "100vh" }}>
-      <h1>Login Form</h1>
+      <h1>Sign Up Form</h1>
       <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <input
           type="email"
           {...register("email", { required: "Email is required" })}
-          className="input"
+          className={`input ${errors.email ? 'input-error' : ''}`}
           placeholder="Email"
           autoComplete="off"
         />
@@ -36,7 +36,7 @@ const Login = ({ onLogin }) => {
 
         <input
           type="password"
-          {...register("password", { required: "Password is required" })}
+          {...register("password", { required: "Password is required", minLength: { value: 6, message: "Password must be at least 6 characters" } })}
           className="input"
           placeholder="Password"
           autoComplete="off"
@@ -44,11 +44,11 @@ const Login = ({ onLogin }) => {
         {errors.password && <span style={{ color: "red" }}>{errors.password.message}</span>}
 
         <button type="submit" className="button input">
-          Log In
+          Sign Up
         </button>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default SignUp;
