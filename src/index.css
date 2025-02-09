@@ -85,6 +85,23 @@ h1 {
   line-height: 1.1;
 }
 
+.formButton {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  border-radius: 10px;
+  padding: 1vw 1vw;
+  outline: none;
+  margin: 5px;
+  text-align: center;
+}
+
 .button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -196,4 +213,9 @@ h1 {
 
 .read-the-docs {
   color: #888;
+}
+
+input:-webkit-autofill {
+  box-shadow: inset 0 0 0px 1000px white !important;
+  -webkit-text-fill-color: #000 !important;
 }
