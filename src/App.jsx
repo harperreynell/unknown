@@ -3,6 +3,8 @@ import { Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Login from "./pages/Login";
+import History from "./pages/History";
+import Profile from "./pages/Profile";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -17,7 +19,7 @@ const App = () => {
         <Link to="/">Home</Link> | <Link to="/about">About</Link> 
         {isLoggedIn ? (
           <>
-            | <Link to="/profile">Profile</Link> |{" "}
+            | <Link to="/profile">Profile</Link> | <Link to="/history">History</Link> |{" "}
             <Link to="/" onClick={() => setIsLoggedIn(false)}>
               Log Out
             </Link>
@@ -35,8 +37,10 @@ const App = () => {
             element={<Login onLogin={() => handleLogin(true)} />}
           />
           <Route
-            path="/profile"
-            element={isLoggedIn ? <h1>Profile Page</h1> : <h1>Access Denied</h1>}
+            path="/profile" element={<Profile />}
+          />
+          <Route 
+            path="/history" element={<History />}
           />
         </Routes>
       </div>

@@ -8,12 +8,12 @@ const Login = ({ onLogin }) => {
 
   const onSubmit = (data) => {
     console.log(data);
-    onLogin(); // Notify parent (App) that the user is logged in
-    navigate("/"); // Redirect to Home page after login
+    onLogin(); 
+    navigate("/"); 
   };
 
   const handleButtonClick = () => {
-    handleSubmit(onSubmit)(); // Manually trigger form submission
+    handleSubmit(onSubmit)();
   };
 
   return (

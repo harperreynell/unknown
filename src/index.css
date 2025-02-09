@@ -214,8 +214,3 @@ h1 {
 .read-the-docs {
   color: #888;
 }
-
-input:-webkit-autofill {
-  box-shadow: inset 0 0 0px 1000px white !important;
-  -webkit-text-fill-color: #000 !important;
-}
