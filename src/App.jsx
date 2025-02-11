@@ -6,46 +6,43 @@ import Login from "./pages/Login";
 import History from "./pages/History";
 import Profile from "./pages/Profile";
 import SignUp from "./pages/Signup";
+import Quest from "./pages/Quest";
+import CreateQuest from "./pages/CreateQuest";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState({ name: "", surname: "" });
 
-  const handleLogin = (status) => {
+  const handleLogin = (status, name = "", surname = "") => {
     setIsLoggedIn(status);
+    setUserData({ name, surname });
   };
 
   return (
     <>
       <nav>
-        <Link to="/">Home</Link> | <Link to="/about">About</Link> | <Link to="/signup">Sign Up</Link>
+        <Link to="/">Home</Link> | <Link to="/about">About</Link>
         {isLoggedIn ? (
           <>
             | <Link to="/profile">Profile</Link> | <Link to="/history">History</Link> |{" "}
-            <Link to="/" onClick={() => setIsLoggedIn(false)}>
+            <Link to="/" onClick={() => handleLogin(false)}>
               Log Out
             </Link>
           </>
         ) : (
-          <>| <Link to="/login">Log In</Link></>
+          <>| <Link to="/login">Log In</Link> | <Link to="/signup">Sign Up</Link></>
         )}
       </nav>
       <div className="card" style={{ paddingTop: "5rem" }}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home userData={userData} />} />
           <Route path="/about" element={<About />} />
-          <Route
-            path="/login"
-            element={<Login onLogin={() => handleLogin(true)} />}
-          />
-          <Route
-            path="/signup" element={<SignUp />}
-          />
-          <Route
-            path="/profile" element={<Profile />}
-          />
-          <Route 
-            path="/history" element={<History />}
-          />
+          <Route path="/login" element={<Login onLogin={handleLogin} />} />
+          <Route path="/signup" element={<SignUp onLogin={handleLogin} />} />
+          <Route path="/profile" element={<Profile userData={userData} />} />
+          <Route path="/history" element={<History />} />
+          <Route path="/create-quest" element={<CreateQuest />} />
+          <Route path="/quest/:id" element={<Quest />} />
         </Routes>
       </div>
     </>

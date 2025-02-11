@@ -1,20 +1,33 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { auth, createUserWithEmailAndPassword } from "../../backend/server"; 
+import { auth, db } from "../../backend/server";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 const SignUp = ({ onLogin }) => { 
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    const { email, password } = data;
+    const { email, password, name, surname } = data;
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      console.log("User signed up:", userCredential.user);
-      onLogin(true); 
-      navigate("/"); 
+      const user = userCredential.user;
+      
+      await setDoc(doc(db, "users", user.uid), {
+        first: name,
+        last: surname,
+        email: user.email,
+        createdAt: new Date(),
+      });
+
+      console.log("User signed up and document created:", user.uid);
+
+      if (onLogin) onLogin(true, name, surname);
+      navigate("/");
+
     } catch (error) {
       console.error("Error signing up:", error.message);
       alert(error.message);
@@ -41,6 +54,23 @@ const SignUp = ({ onLogin }) => {
           placeholder="Password"
           autoComplete="off"
         />
+        
+        <input
+          type="text"
+          {...register("name", { required: "Name is required" })}
+          className="input"
+          placeholder="Name"
+          autoComplete="off"
+        />
+        
+        <input
+          type="text"
+          {...register("surname", { required: "Surname is required" })}
+          className="input"
+          placeholder="Surname"
+          autoComplete="off"
+        />
+        
         {errors.password && <span style={{ color: "red" }}>{errors.password.message}</span>}
 
         <button type="submit" className="button input">
