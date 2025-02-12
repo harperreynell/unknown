@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { auth, db } from "../../backend/server";
+import { auth, db } from "../backend/server";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
@@ -15,7 +15,7 @@ const SignUp = ({ onLogin }) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      
+
       await setDoc(doc(db, "users", user.uid), {
         first: name,
         last: surname,

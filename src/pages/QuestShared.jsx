@@ -1,40 +1,40 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { db, doc, getDoc } from "../backend/server"; 
-import { getAuth } from "firebase/auth";
+import { useParams, useNavigate } from "react-router-dom";
+import { db } from "../backend/server"; 
+import { doc, getDoc } from "firebase/firestore";
 
-const auth = getAuth();
-
-const Quest = () => {
+const SharedQuest = () => {
   const { id } = useParams();
   const [quest, setQuest] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userAnswers, setUserAnswers] = useState({});
   const [feedback, setFeedback] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchQuestData = async () => {
       try {
-        const userId = auth.currentUser.uid;
-        const questRef = doc(db, "users", userId, "quests", id);
+        const questRef = doc(db, "sharedquests", id); 
         const questSnap = await getDoc(questRef);
 
         if (questSnap.exists()) {
           setQuest(questSnap.data());
         } else {
-          setError("Quest not found");
+          setError("Quest not found.");
+          setTimeout(() => {
+            navigate("/");
+          }, 3000);
         }
       } catch (error) {
-        console.error("Error fetching quest:", error);
-        setError("Failed to fetch quest data");
+        setError("Failed to fetch quest data.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchQuestData();
-  }, [id]);
+  }, [id, navigate]);
 
   const handleAnswerChange = (questionId, answer) => {
     setUserAnswers({
@@ -43,32 +43,12 @@ const Quest = () => {
     });
   };
 
-  const fetchQuestData = async () => {
-    try {
-      const userId = auth.currentUser.uid;
-      const questRef = doc(db, "users", userId, "quests", id);
-      const questSnap = await getDoc(questRef);
-  
-      if (questSnap.exists()) {
-        setQuest(questSnap.data());
-      } else {
-        setError("Quest not found");
-      }
-    } catch (error) {
-      console.error("Error fetching quest:", error);
-      setError("Failed to fetch quest data");
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-
   const handleSubmitAnswers = () => {
     let correctAnswers = 0;
-  
+
     quest.questions.forEach((question) => {
       const userAnswer = userAnswers[question.id];
-  
+
       if (question.type === "input") {
         if (userAnswer && userAnswer.trim().toLowerCase() === question.correctAnswer.trim().toLowerCase()) {
           correctAnswers++;
@@ -83,7 +63,7 @@ const Quest = () => {
         }
       }
     });
-  
+
     setFeedback(`${correctAnswers} out of ${quest.questions.length} questions are correct.`);
   };
 
@@ -96,7 +76,7 @@ const Quest = () => {
   }
 
   if (!quest) {
-    return <div>Quest not found</div>;
+    return <div>Quest not found.</div>;
   }
 
   return (
@@ -108,11 +88,10 @@ const Quest = () => {
         {quest.questions.map((question, index) => (
           <div key={question.id} style={{ marginBottom: "20px" }}>
             <h3>{index + 1}. {question.question}</h3>
-            
+
             {question.type === "input" ? (
               <input
                 type="text"
-                className="input"
                 value={userAnswers[question.id] || ""}
                 onChange={(e) => handleAnswerChange(question.id, e.target.value)}
                 placeholder="Your answer"
@@ -122,7 +101,6 @@ const Quest = () => {
               question.options.map((option, optionIndex) => (
                 <div key={optionIndex}>
                   <input
-                    className="button"
                     type="radio"
                     id={`${question.id}-option-${optionIndex}`}
                     name={question.id}
@@ -168,7 +146,6 @@ const Quest = () => {
         <button
           type="button"
           onClick={handleSubmitAnswers}
-          className="button"
           style={{ padding: "10px", fontSize: "16px" }}
         >
           Submit Answers
@@ -180,4 +157,4 @@ const Quest = () => {
   );
 };
 
-export default Quest;
+export default SharedQuest;

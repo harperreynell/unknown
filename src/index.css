@@ -207,3 +207,42 @@ h1 {
 .read-the-docs {
   color: #888;
 }
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background: #333;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  width: 300px;
+}
+
+.input-field {
+  padding: 10px;
+  width: 80%;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+.popup-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
