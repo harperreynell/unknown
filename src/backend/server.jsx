@@ -3,7 +3,7 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } f
 import { getFirestore, collection, getDocs, getDoc, addDoc, doc } from 'firebase/firestore';
 
 const firebaseConfig = {
-    
+    // put your api keys here
 };
 
 const app = initializeApp(firebaseConfig);
