@@ -66,7 +66,7 @@ docker pull whoami1331/unknown
 
 ### Запуск контейнера
 ```sh
-docker run whoami1331/unknown:latest
+docker run -p 5173:5173 docker.io/whoami1331/unknown:latest
 ```
 
 ## Відомі проблеми
